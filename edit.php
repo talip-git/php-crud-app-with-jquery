@@ -13,19 +13,24 @@
                 header("Location:edit.php?profile_id=".$_GET['profile_id']);
                 return;
             }
+            if(strpos($_POST['email'],'@') == false){
+                $_SESSION['error'] = 'Wrong email format!';
+                header("Location:edit.php?profile_id=".$_GET['profile_id']);
+                return;
+            }
         }
         for ($i=0;$i<=9;$i++){
             if(!isset($_POST['year'.$i]) || !isset($_POST['desc'.$i])) continue;
             else{
-                if(strlen($_POST['year'.$i])<1 || strlen($_POST['description'.$i]<1)){
-                    $_SESSION['error'] = 'All fields are required';
+                if(strlen($_POST['desc'.$i])<1 || strlen($_POST['year'.$i])<1){
+                    $_SESSION['error'] = 'Description can not be empty!';
                     header("Location:edit.php?profile_id=".$_GET['profile_id']);
-                    exit(0);
+                    return;
                 }
                 if(!is_numeric($_POST['year'.$i])){
                     $_SESSION['error'] = 'Year has to be a numeric value!';
                     header("Location:edit.php?profile_id=".$_GET['profile_id']);
-                    exit(0);
+                    return;
                 }
             }
         }
