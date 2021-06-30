@@ -11,7 +11,27 @@
                strlen($_POST['email'])<1 || strlen($_POST['headline'])<1 ||strlen($_POST['summary'])<1){
                 $_SESSION['error'] = 'All fields are required';
                 header("Location:add.php");
-                exit(0);
+                return;
+            }
+            if(strpos($_POST['email'],'@') == false){
+                $_SESSION['error'] = 'Wrong email format!';
+                header("Location:add.php");
+                return;
+            }
+        }
+        for ($i=0;$i<=9;$i++){
+            if(!isset($_POST['year'.$i]) || !isset($_POST['desc'.$i])) continue;
+            else{
+                if(strlen($_POST['desc'.$i])<1 || strlen($_POST['year'.$i])<1){
+                    $_SESSION['error'] = 'Description can not be empty!';
+                    header("Location:add.php");
+                    exit(0);
+                }
+                if(!is_numeric($_POST['year'.$i])){
+                    $_SESSION['error'] = 'Year has to be a numeric value!';
+                    header("Location:add.php");
+                    exit(0);
+                }
             }
         }
         require_once 'pdo.php';
@@ -28,22 +48,6 @@
         ':su' => $_POST['summary'])
         );
         $id = $con->lastInsertId();
-
-        for ($i=0;$i<=9;$i++){
-            if(!isset($_POST['year'.$i]) || !isset($_POST['desc'.$i])) continue;
-            else{
-                if(strlen($_POST['year'.$i])<1 || strlen($_POST['description'.$i]<1)){
-                    $_SESSION['error'] = 'All fields are required';
-                    header("Location:add.php");
-                    exit(0);
-                }
-                if(!is_numeric($_POST['year'.$i])){
-                    $_SESSION['error'] = 'Year has to be a numeric value!';
-                    header("Location:add.php");
-                    exit(0);
-                }
-            }
-        }
         
         $rank = 1;
         for ($i=0; $i<=9; $i++) { 
